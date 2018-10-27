@@ -1,16 +1,16 @@
-class Thenable {
-    constructor(num) {
-      this.num = num;
-    }
-    then(resolve, reject) {
-      alert(resolve); // function() { native code }
-      // resolve with this.num*2 after the 1 second
-      setTimeout(() => resolve(this.num * 2), 1000); // (**)
-    }
-  }
-  
-  new Promise(resolve => resolve(1))
-    .then(result => {
-      return new Thenable(result); // (*)
-    })
-    .then(alert); // shows 2 after 1000ms
+fetch('/article/promise-chaining/user.json')
+  // Load it as json
+  .then(response => response.json())
+  // Make a request to github
+  .then(user => fetch(`https://api.github.com/users/${user.name}`))
+  // Load the response as json
+  .then(response => response.json())
+  // Show the avatar image (githubUser.avatar_url) for 3 seconds (maybe animate it)
+  .then(githubUser => {
+    let img = document.createElement('img');
+    img.src = githubUser.avatar_url;
+    img.className = "promise-avatar-example";
+    document.body.append(img);
+
+    setTimeout(() => img.remove(), 3000); // (*)
+  });
