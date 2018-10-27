@@ -1,4 +1,7 @@
-// an immediately resolved promise
-let promise = new Promise(resolve => resolve("done!"));
+// an "immediately" resolved Promise
+const executor = resolve => resolve("done!");
+const promise = new Promise(executor);
 
-promise.then(alert); // done! (shows up right now)
+promise.then(alert); // this alert shows last (*)
+
+alert("code finished"); // this alert shows first
