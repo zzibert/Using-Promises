@@ -1,23 +1,21 @@
-// the execution: catch -> catch -> then
-new Promise(function(resolve, reject) {
-
-  throw new Error("Whoops!");
-
-}).catch(function(error) { // (*)
-
-  if (error instanceof URIError) {
-    // handle it
-  } else {
-    alert("Can't handle such error");
-
-    throw error; // throwing this or another error jumps to the next catch
+class HttpError extends Error { // (1)
+  constructor(response) {
+    super(`${response.status} for ${response.url}`);
+    this.name = 'HttpError';
+    this.response = response;
   }
+}
 
-}).then(function() {
-  /* never runs here */
-}).catch(error => { // (**)
+function loadJson(url) { // (2)
+  return fetch(url)
+    .then(response => {
+      if (response.status == 200) {
+        return response.json();
+      } else {
+        throw new HttpError(response);
+      }
+    })
+}
 
-  alert(`The unknown error has occurred: ${error}`);
-  // don't return anything => execution goes the normal way
-
-});
+loadJson('no-such-user.json') // (3)
+  .catch(alert); // HttpError: 404 for .../no-such-user.json
