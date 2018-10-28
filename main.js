@@ -1,30 +1,21 @@
-function loadJson(url) {
-  return fetch(url)
-    .then(response => response.json());
-}
+new Promise(function(resolve, reject) {
+  throw new Error("Whoops!");
+}).catch(alert); // Error: Whoops!
 
-function loadGithubUser(name) {
-  return fetch(`https://api.github.com/users/${name}`)
-    .then(response => response.json());
-}
+//works the same as
 
-function showAvatar(githubUser) {
-  return new Promise(function(resolve, reject) {
-    let img = document.createElement('img');
-    img.src = githubUser.avatar_url;
-    img.className = "promise-avatar-example";
-    document.body.append(img);
+new Promise(function(resolve, reject) {
+  reject(new Error("Whoops!"));
+}).catch(alert); // Error: Whoops!
 
-    setTimeout(() => {
-      img.remove();
-      resolve(githubUser);
-    }, 3000);
-  });
-}
+new Promise(function(resolve, reject) {
+  resolve("ok");
+}).then(function(result) {
+  throw new Error("Whoops!"); // rejects the promise
+}).catch(alert); // Error: Whoops!
 
-// Use them:
-loadJson('/article/promise-chaining/user.json')
-  .then(user => loadGithubUser(user.name))
-  .then(showAvatar)
-  .then(githubUser => alert(`Finished showing ${githubUser.name}`));
-  // ...
+new Promise(function(resolve, reject) {
+  resolve("ok");
+}).then(function(result) {
+  blabla(); // no such function
+}).catch(alert); // ReferenceError: blabla is not defined
