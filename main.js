@@ -1,21 +1,5 @@
-class HttpError extends Error { // (1)
-  constructor(response) {
-    super(`${response.status} for ${response.url}`);
-    this.name = 'HttpError';
-    this.response = response;
-  }
+async function f() {
+  return 1;
 }
 
-function loadJson(url) { // (2)
-  return fetch(url)
-    .then(response => {
-      if (response.status == 200) {
-        return response.json();
-      } else {
-        throw new HttpError(response);
-      }
-    })
-}
-
-loadJson('no-such-user.json') // (3)
-  .catch(alert); // HttpError: 404 for .../no-such-user.json
+f().then(value => console.log(value)); // 1
