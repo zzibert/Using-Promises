@@ -1,21 +1,10 @@
+// the execution: catch -> then
 new Promise(function(resolve, reject) {
+
   throw new Error("Whoops!");
-}).catch(alert); // Error: Whoops!
 
-//works the same as
+}).catch(function(error) {
 
-new Promise(function(resolve, reject) {
-  reject(new Error("Whoops!"));
-}).catch(alert); // Error: Whoops!
+  alert("The error is handled, continue normally");
 
-new Promise(function(resolve, reject) {
-  resolve("ok");
-}).then(function(result) {
-  throw new Error("Whoops!"); // rejects the promise
-}).catch(alert); // Error: Whoops!
-
-new Promise(function(resolve, reject) {
-  resolve("ok");
-}).then(function(result) {
-  blabla(); // no such function
-}).catch(alert); // ReferenceError: blabla is not defined
+}).then(() => alert("Next successful handler runs"));
